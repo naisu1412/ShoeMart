@@ -1,0 +1,47 @@
+@startuml
+
+class Item {
+    id: GUID
+    name: string
+    category: Category
+    description: string
+    getId()
+    setId()
+}
+
+class ItemList {
+    items: Item[]
+    addItem()
+    removeItem()
+    findItem()
+}
+
+class Category {
+    id: GUID
+    name: string
+    description: string()
+    addCategory()
+    removeCategory()
+    getProducts()
+    getId()
+    setId()
+}
+
+class CategoryList {
+    Categories: Category[]
+    addCategory()
+    removeCategory()
+}
+
+class Cart {
+    items: Items[]
+    addItemOnCart()
+    removeItemOnCart()
+    getTotal()
+}
+
+ItemList -- Cart: Contains
+ItemList - Item: 0..*  1
+Item -- Category: type of
+Category - CategoryList: 0..*  1
+@enduml
