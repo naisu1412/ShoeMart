@@ -1,11 +1,15 @@
-@startuml
-
+@startuml Shoemart
 class Item {
     id: GUID
     name: string
     category: Category
     description: string
+    price: float
+    rating: int
+    quantity: int
+    photos: string[]
     getId()
+    changePrice()
     setId()
 }
 
