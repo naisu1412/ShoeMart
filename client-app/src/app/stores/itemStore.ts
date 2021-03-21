@@ -1,35 +1,31 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { createContext } from "react";
 import agent from "../api/agent";
+import { IItem } from "../models/item";
+import { RootStore } from "./rootContext";
 
 
 export class ItemStore {
-    rootStore: any;
-    @observable itemsList = [];
+    rootStore: RootStore;
+    @observable itemsList:IItem[] = [];
 
-    constructor(rootStore: any) {
+    constructor(rootStore: RootStore) {
 
         this.rootStore = rootStore;
-        this.loadItems();
         makeObservable(this);
+        this.loadItems();
     }
 
-
+    
     @action loadItems = async () => {
         const itemList = await agent.Items.list();
 
         try {
             runInAction(() => {
-                console.log("I got here")
-                console.log(itemList)
                 this.itemsList = itemList;
             })
         } catch (error) {
             console.log(error);
         }
-    }
-
-    @action addToCart = async (id: number) => {
-
     }
 }

@@ -9,3 +9,7 @@ export interface IItem {
     quantity: number;
 
 }
+
+export interface ICartItem extends IItem {
+    cartQuantity: number;
+}

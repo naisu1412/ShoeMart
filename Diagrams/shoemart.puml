@@ -13,6 +13,16 @@ class Item {
     setId()
 }
 
+class User {
+    id: GUID
+    displayName: string
+    cart: Cart
+    address: string
+    billingAddress: string
+    phone: string
+    checkOut()
+}
+
 class ItemList {
     items: Item[]
     addItem()
@@ -45,7 +55,8 @@ class Cart {
 }
 
 ItemList -- Cart: Contains
-ItemList - Item: 0..*  1
+ItemList - Item: 0..* : 1
 Item -- Category: type of
-Category - CategoryList: 0..*  1
+Category - CategoryList: 0..* :  1
+User - Cart: 1:1 Has a
 @enduml

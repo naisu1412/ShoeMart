@@ -8,6 +8,7 @@ namespace Application.Core
         public MappingProfile()
         {
             CreateMap<Item, Item>();
+            CreateMap<Cart, Cart>();
         }
     }
 }

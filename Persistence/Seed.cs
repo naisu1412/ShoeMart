@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
@@ -10,6 +11,35 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context)
         {
+            // if (!userManager.Users.Any())
+            // {
+            //     var users = new List<AppUser>{
+            //         new AppUser{
+            //             DisplayName =  "Naisu",
+            //             Address = "Pulong Gubat Balagtas Bulacan",
+            //             BillingAddress = "Pulong Gubat Balagtas Bulacan",
+            //             Phone = "09496557426",
+            //         },
+            //         new AppUser{
+            //             DisplayName =  "Estelle",
+            //             Address = "Liberl",
+            //             BillingAddress = "Liberl",
+            //             Phone = "444 555",
+            //         },
+            //         new AppUser{
+            //             DisplayName =  "Joshua",
+            //             Address = "Liberl",
+            //             BillingAddress = "Liberl",
+            //             Phone = "444 555",
+            //         }
+            //     };
+
+            //     foreach (var user in users)
+            //     {
+            //         await userManager.CreateAsync(user, "Pa$$w0rd");
+            //     }
+            // }
+
             //Check if there's any value
             if (context.Items.Any()) return;
 

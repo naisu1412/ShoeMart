@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Items;
+using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,14 +45,18 @@ namespace API
                     ;
                 });
             });
-            
+
             services.AddControllers();
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+
             services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddAutoMapper(typeof(MappingProfile).Assembly); 
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+
+           
 
         }
 
