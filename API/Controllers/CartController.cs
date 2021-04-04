@@ -16,11 +16,11 @@ namespace API.Controllers
             return await Mediator.Send(new List.Query());
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<Cart>>> AddItem(Cart item)
-        {
-            return Ok(await Mediator.Send(new Add.Command { CartItem = item }));
-        }
+        // [HttpPost]
+        // public async Task<ActionResult<List<Cart>>> AddItem(Cart item)
+        // {
+        //     return Ok(await Mediator.Send(new Add.Command { CartItem = item }));
+        // }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cart>> DeleteItem(Guid id)
@@ -29,12 +29,12 @@ namespace API.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Unit>> Edit(Guid id, Cart cartItem)
-        {
-            cartItem.Id = id;
-            return Ok(await Mediator.Send(new Edit.Command { Cartitem = cartItem }));
+        // [HttpPut("{id}")]
+        // public async Task<ActionResult<Unit>> Edit(Guid id, Cart cartItem)
+        // {
+        //     cartItem.Id = id;
+        //     return Ok(await Mediator.Send(new Edit.Command { Cartitem = cartItem }));
 
-        }
+        // }
     }
 }
