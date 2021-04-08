@@ -23,6 +23,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Application.Interfaces;
+using Infrastructure.Security;
 
 namespace API
 {
@@ -85,6 +87,8 @@ namespace API
                 };
             });
             services.AddScoped<TokenService>();
+            services.AddScoped<IUserAccessor, UserAccesor>();
+
 
 
         }
