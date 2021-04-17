@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
 import { Button, Card } from 'semantic-ui-react';
-import { ICartItem, IItem } from '../../../app/models/item';
+import { ICartItem } from '../../../app/models/item';
 import { RootStoreContext } from '../../../app/stores/rootContext';
 
 const ItemCart: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
-    const { cartList, removeItem } = rootStore.cartStore;
+    const { cartList, removeItem, removingToCart } = rootStore.cartStore;
 
     return (
         <Card.Group>
@@ -14,10 +14,10 @@ const ItemCart: React.FC = () => {
                 <Card key={item.id} fluid>
                     <Card.Header > {item.name} x{item.cartQuantity}</Card.Header>
                     <Card.Meta>Total Price: {item.price * item.cartQuantity} </Card.Meta>
-                    <Button basic color='red' onClick={() => {
+                    <Button basic color='red' disabled={removingToCart} onClick={() => {
                         removeItem(item);
                     }}>Remove</Button>
-                    
+
                 </Card>
             ))}
         </Card.Group>

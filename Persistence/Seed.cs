@@ -9,36 +9,11 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
-            // if (!userManager.Users.Any())
-            // {
-            //     var users = new List<AppUser>{
-            //         new AppUser{
-            //             DisplayName =  "Naisu",
-            //             Address = "Pulong Gubat Balagtas Bulacan",
-            //             BillingAddress = "Pulong Gubat Balagtas Bulacan",
-            //             Phone = "09496557426",
-            //         },
-            //         new AppUser{
-            //             DisplayName =  "Estelle",
-            //             Address = "Liberl",
-            //             BillingAddress = "Liberl",
-            //             Phone = "444 555",
-            //         },
-            //         new AppUser{
-            //             DisplayName =  "Joshua",
-            //             Address = "Liberl",
-            //             BillingAddress = "Liberl",
-            //             Phone = "444 555",
-            //         }
-            //     };
 
-            //     foreach (var user in users)
-            //     {
-            //         await userManager.CreateAsync(user, "Pa$$w0rd");
-            //     }
-            // }
+
+
 
             //Check if there's any value
             if (context.Items.Any()) return;
@@ -88,9 +63,54 @@ namespace Persistence
 
 
             };
+            var users = new List<AppUser>{
+                    new AppUser{
+                        DisplayName = "bob",
+                        UserName= "Bob",
+                        Email="bob@test.com",
+                        CartID = new Guid(),
+                        Cart= new Cart{}
+                    },
+                    new AppUser{
+                        DisplayName = "Tom",
+                        UserName= "tom",
+                        Email="tom@test.com",
+                        CartID = new Guid(),
+                        Cart= new Cart{}
+                    },
+                    new AppUser{
+                        DisplayName = "jane",
+                        UserName= "jane",
+                        Email="jane@test.com",
+                        CartID = new Guid(),
+                        Cart= new Cart{}
+                    }
+                };
+
+            if (context.CartedItems.Any()) return;
+
+            var cartedItems = new List<CartedItems>{
+                   new CartedItems {
+                       CartId = users[0].Cart.Id,
+                       ItemId = items[0].Id,
+                       Item = items[0],
+                       Cart = users[0].Cart
+                   }
+               };
+
+            if (!userManager.Users.Any())
+            {
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+            }
 
             await context.Items.AddRangeAsync(items);
+            await context.CartedItems.AddRangeAsync(cartedItems);
             await context.SaveChangesAsync();
+
 
         }
     }

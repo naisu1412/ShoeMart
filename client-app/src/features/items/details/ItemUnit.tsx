@@ -7,7 +7,7 @@ import { RootStoreContext } from '../../../app/stores/rootContext'
 
 const ItemUnit: React.FC<{ item: IItem }> = ({ item }) => {
     const rootStore = useContext(RootStoreContext);
-    const { addItem } = rootStore.cartStore;
+    const { addItem, addingToCart } = rootStore.cartStore;
 
     return (
         <Card key={item.id}>
@@ -22,7 +22,7 @@ const ItemUnit: React.FC<{ item: IItem }> = ({ item }) => {
             </Card.Content>
             <Card.Content extra>
                 <div className='ui two buttons'>
-                    <Button basic color='green' onClick={() => {
+                    <Button basic color='green' disabled={item.quantity === 0 || addingToCart} name={item.id} onClick={(e) => {
                         addItem(item);
                     }}>
                         Add to Cart

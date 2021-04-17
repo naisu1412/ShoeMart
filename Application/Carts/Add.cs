@@ -1,13 +1,9 @@
 using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Errors;
 using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
-
 
 namespace Application.Carts
 {
@@ -15,7 +11,7 @@ namespace Application.Carts
     {
         public class Command : IRequest
         {
-            public Cart CartItem { get; set; }
+            public Guid Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -28,27 +24,20 @@ namespace Application.Carts
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var item = new Cart()
-                {
-                    ItemID = request.CartItem.ItemID
-                };
+                var cartItem = await _context.Cart.FindAsync(request.Id);
+                
+                // create carted item where 
+                // user is current user and cart is user's cart
+                // reduce item in inventory
 
-                await _context.Cart.AddAsync(item);
+                _context.Add(cartItem);
 
-                var itemInInventory = await _context.Items.SingleOrDefaultAsync(x => x.Id == request.CartItem.ItemID);
-
-                if (itemInInventory == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { Item = "Not Found" });
-
-                if (itemInInventory.Quantity > 0)
-                    itemInInventory.Quantity -= 1;
-                else
-                    throw new RestException(HttpStatusCode.BadRequest, new { Item = "No More Stock" });
-
-                var success = await _context.SaveChangesAsync() > 0;
-                if (success) return Unit.Value;
-                throw new Exception("Problem in Saving changes");
+                await _context.SaveChangesAsync();
+                
+                return Unit.Value;
             }
         }
     }
+
+
 }

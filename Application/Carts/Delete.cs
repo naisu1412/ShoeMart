@@ -11,7 +11,7 @@ namespace Application.Carts
     {
         public class Command : IRequest
         {
-            public Guid Id { get; set; }
+            public Item item { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -24,7 +24,7 @@ namespace Application.Carts
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var cartItem = await _context.Cart.FindAsync(request.Id);
+                var cartItem = await _context.Cart.FindAsync(request.item.Id);
 
                 _context.Remove(cartItem);
 

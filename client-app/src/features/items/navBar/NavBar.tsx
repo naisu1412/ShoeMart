@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useState } from 'react'
-import { Segment, Menu, Button, Header, Modal } from 'semantic-ui-react'
-import { ICartItem } from '../../../app/models/item';
+import { useContext, useState } from 'react'
+import { Segment, Menu, Button, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootContext';
 import ItemCart from '../../cart/details/ItemCart';
 
@@ -59,7 +58,7 @@ const NavBar = () => {
                             Close
                         </Button>
                     </Modal.Actions>
-                </Modal>
+                    </Modal>
 
             </Menu>
 

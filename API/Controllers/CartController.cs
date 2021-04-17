@@ -17,7 +17,7 @@ namespace API.Controllers
         }
 
         // [HttpPost]
-        // public async Task<ActionResult<List<Cart>>> AddItem(Cart item)
+        // public async Task<ActionResult<List<Cart>>> AddItem(Item item)
         // {
         //     return Ok(await Mediator.Send(new Add.Command { CartItem = item }));
         // }

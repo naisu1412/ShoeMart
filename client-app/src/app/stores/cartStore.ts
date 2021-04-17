@@ -18,6 +18,10 @@ export class CartStore {
         this.loadItems();
     }
 
+    @observable addingToCart = false;
+    @observable loadingItems = false;
+    @observable removingToCart = false;
+
     @observable getTotalItemCount = () => {
         let itemCount = 0;
         this.cartList.forEach(cartItem => {
@@ -37,22 +41,32 @@ export class CartStore {
         let _itemInventory: any = itemInventory.find(_i => _i.id === item.id);
 
         try {
-
+            runInAction(() => {
+                this.addingToCart = true;
+            })
             if (_itemInventory.quantity > 0) {
                 await agentExport.Cart.add(newItem);
-                runInAction(() => {
+                runInAction(async () => {
                     if (getItemInCart().length === 0) {
                         this.cartList.push({ ...item, cartQuantity: 1 })
                     } else {
                         getItemInCart()[0].cartQuantity += 1;
+                        _itemInventory.quantity -= 1;
+                        await agentExport.Items.update({ ...item, quantity: _itemInventory.quantity });
                     }
-                    _itemInventory.quantity -= 1;
+                    this.addingToCart = false;
                 })
             } else {
+                runInAction(() => {
+                    this.addingToCart = false;
+                })
                 console.log("Not In stock");
             }
 
         } catch (error) {
+            runInAction(() => {
+                this.addingToCart = false;
+            })
             console.log(error);
         }
     }
@@ -60,10 +74,10 @@ export class CartStore {
     @action loadItems = async () => {
         const itemsInCartIdOnly: IICart[] = await agentExport.Cart.list();
         const itemInventory = this.rootStore.itemStore.itemsList;
-
         try {
             runInAction(() => {
-
+                this.loadingItems = true;
+                this.cartList = [];
                 itemsInCartIdOnly.forEach(item => {
                     let _itemInventory: any = itemInventory.find(_i => _i.id === item.itemID);
                     let _itemInTheCart: any = this.cartList.find(i => i.id === item.itemID);
@@ -74,38 +88,53 @@ export class CartStore {
                         _itemInTheCart.cartQuantity += 1;
                     }
                 });
-
+                this.loadingItems = false;
             });
 
         } catch (error) {
+            runInAction(() => {
+                this.loadingItems = false;
+            })
             console.log(error);
         }
     }
 
     @action removeItem = async (item: IItem) => {
-        const itemsInCartIdOnly: IICart[] = await agentExport.Cart.list();
+        const itemInCartIdOnlyList: IICart[] = await agentExport.Cart.list();
         const itemInventory = this.rootStore.itemStore.itemsList;
 
         try {
+            runInAction(() => {
+                this.removingToCart = true;
+
+            });
             const getItemInCart = () => this.cartList.filter(cartItem => item.id === cartItem.id)
-            const getItemInCartItem = () => itemsInCartIdOnly.find(i => i.itemID === item.id);
-            let _itemInventory: any = itemInventory.find(_i => _i.id === item.id);
+            const itemInCartIdOnly = () => itemInCartIdOnlyList.find(i => i.itemID === item.id);
+            let currItem: IItem | undefined = itemInventory.find(_i => _i.id === item.id);
 
             if (getItemInCart().length === 0) {
                 //possibly add a toast here
+
                 console.log("Item is not in the cart");
             } else {
-                if (getItemInCart()[0].cartQuantity > 1) {
-                    await agentExport.Cart.remove(`${getItemInCartItem()?.id}`);
+                if (getItemInCart()[0].cartQuantity > 0) {
+                    await agentExport.Cart.remove(`${itemInCartIdOnly()?.id}`);
+                    await agentExport.Items.update({ ...item, quantity: item.quantity += 1 });
 
-                    getItemInCart()[0].cartQuantity -= 1;
-                    //add quantity not being enabled in database
+                    runInAction(async () => {
+                        getItemInCart()[0].cartQuantity -= 1;
+                        currItem!.quantity += 1;
+                        this.removingToCart = false;
+                    })
                 } else {
                     this.cartList = this.cartList.filter(cartItem => cartItem.id !== item.id);
                 }
             }
 
         } catch (error) {
+            runInAction(() => {
+                this.removingToCart = false;
+            });
             console.log(error);
         }
     }

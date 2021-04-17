@@ -9,12 +9,12 @@ namespace Application.Carts
 {
     public class Detail
     {
-        public class Query : IRequest<Cart>
+        public class Query : IRequest<CartedItems>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Cart>
+        public class Handler : IRequestHandler<Query, CartedItems>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -22,9 +22,11 @@ namespace Application.Carts
                 _context = context;
             }
 
-            public async Task<Cart> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<CartedItems> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Cart.FindAsync(request.Id);
+                
+                // return await _context.CartedItems.FindAsync(request.Id);
+                return null;
             }
         }
     }
